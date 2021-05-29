@@ -25,3 +25,5 @@ export const data = [
     },
   ];
   
+export const phoneData='0349616883'
+export const passwordData='123456'
