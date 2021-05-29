@@ -4,11 +4,7 @@ const NavAccount = () => {
       <div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-info-circle"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
-            />
+            <img src="/img/information.svg" style={{ width: "20px" }} />
           </div>
           <p style={{ marginBottom: "0px" }} className="left-align">
             Thông tin tài khoản
@@ -16,11 +12,7 @@ const NavAccount = () => {
         </div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-cart-plus"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
-            />
+            <img src="/img/shopping-cart.svg" style={{ width: "20px" }} />
           </div>
           <p className="left-align" style={{ marginBottom: "0px" }}>
             Giỏ hàng
@@ -28,11 +20,7 @@ const NavAccount = () => {
         </div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-picture-o"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
-            />
+            <img src="/img/gallery.svg" style={{ width: "20px" }} />
           </div>
           <p className="left-align" style={{ marginBottom: "0px" }}>
             Bộ sưu tập cá nhân
@@ -40,11 +28,7 @@ const NavAccount = () => {
         </div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-wallet"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
-            />
+            <img src="/img/wallet.svg" style={{ width: "20px" }} />
           </div>
           <p className="left-align" style={{ marginBottom: "0px" }}>
             Ví của tôi
@@ -52,11 +36,7 @@ const NavAccount = () => {
         </div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-gift"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
-            />
+            <img src="/img/gift-box.svg" style={{ width: "20px" }} />
           </div>
           <p className="left-align" style={{ marginBottom: "0px" }}>
             Đổi quà tặng
@@ -64,10 +44,9 @@ const NavAccount = () => {
         </div>
         <div className="style-tab d-flex align-items-center p-2">
           <div className="mr-3 d-flex align-items-center">
-            <i
-              className="fa fa-key"
-              style={{ height: "16px", width: "16px" }}
-              aria-hidden="true"
+            <img
+              src="https://meete.co/img/icons/key.svg"
+              style={{ width: "20px" }}
             />
           </div>
           <p className="left-align" style={{ marginBottom: "0px" }}>

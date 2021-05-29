@@ -48,7 +48,7 @@ const Brand = ({ showLocationPopup, locationFromProps }) => {
             aria-label="Search"
           />
           <div className="d-flex searchBar-icon">
-            <i className="fa fa-search" />
+            <img src="/img/loupe.svg" style={{ width: "20px" }} />
           </div>
         </div>
       </div>
