@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,7 +7,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,24 +17,12 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { phoneData } from "../../data";
 import { passwordData } from "../../data";
 import { OTPkey } from "../../data";
+import {useStyles} from './style'
+import {styleFlex} from './style'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  margin: {
-    margin: theme.spacing(0),
-  },
-  textField: {
-    width: "100%",
-  },
-  textFieldSignup: {
-    width: "32ch",
-  },
-}));
 
-export default function LoginModal() {
+
+export default function LoginModal({showModal,handleSuccessLogin}) {
   const [open, setOpen] = useState(true);
   // Login Page
   const [phone, setPhone] = useState("");
@@ -53,6 +40,7 @@ export default function LoginModal() {
   const [showResetPasswordButton, setShowResetPasswordButton] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [reEnterNewPassword, setReEnterNewPassword] = useState("");
+  const [updatePassword,setUpdatePassword]=useState('');
 
   //OTP Page
   const [OTPPage, setOTPPage] = useState(false);
@@ -70,13 +58,8 @@ export default function LoginModal() {
     email: "",
   });
 
-  const classes = useStyles();
+  const classes=useStyles()
 
-  const styleFlex = {
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-  };
   const handlePhoneCorrect = (phoneValue) => {
     return phoneValue === phoneData;
   };
@@ -123,6 +106,7 @@ export default function LoginModal() {
 
   const handleClose = () => {
     setOpen(false);
+    showModal(false)
   };
 
   const handleLoginButton = () => {
@@ -130,8 +114,9 @@ export default function LoginModal() {
       "standard-adornment-password"
     ).value;
     setPassword(passwordValue);
-    if (handleCorrectPassword(passwordValue)) {
+    if (handleCorrectPassword(passwordValue) || passwordValue===updatePassword) {
       setOpen(false);
+      handleSuccessLogin('Nguyễn Tiến Tài')
     }
   };
 
@@ -150,9 +135,11 @@ export default function LoginModal() {
   const handleResetPasswordButton = () => {
     if (newPassword === reEnterNewPassword) {
       setResetPasswordPage(false);
+      setUpdatePassword(newPassword);
       setOTPPage(true);
     } else {
       alert("Password not match");
+      setReEnterNewPassword('')
     }
   };
 
@@ -162,6 +149,7 @@ export default function LoginModal() {
       setPasswordPage(true);
     } else {
       alert("OTP not match");
+      setOTP('')
     }
   };
 
@@ -187,6 +175,26 @@ export default function LoginModal() {
     setResetPasswordPage(true);
   };
 
+  const handleBackFromPasswordToLogin=()=>{
+    setPasswordPage(false);
+    setLoginPage(true)
+  }
+
+  const handleBackFromResetPasswordToPassword=()=>{
+    setResetPasswordPage(false);
+    setPasswordPage(true)
+  }
+
+  const handleBackFromOTPToResetPassword=()=>{
+    setOTPPage(false);
+    setResetPasswordPage(true)
+  }
+
+  const handleBackFromSignupToLogin=()=>{
+    setSignupPage(false);
+    setLoginPage(true)
+  }
+
   //Render Component
   return (
     <div>
@@ -199,7 +207,8 @@ export default function LoginModal() {
         {(loginPage || passwordPage) && (
           <DialogTitle id="form-dialog-title">
             <div style={styleFlex}>
-              <span>
+              {
+                passwordPage && (<span onClick={handleBackFromPasswordToLogin}>
                 <img
                   src="/img/left-arrow.svg"
                   style={{
@@ -208,7 +217,8 @@ export default function LoginModal() {
                     paddingRight: "10px",
                   }}
                 ></img>
-              </span>
+              </span>)
+              }
               <h5 style={{ fontWeight: "bold" }}>
                 Chào mừng bạn đã trở lại với Meete
               </h5>
@@ -222,7 +232,7 @@ export default function LoginModal() {
             {/* Login small text */}
             {loginPage && (
               <div style={styleFlex}>
-                <small>Săn ưu đãi khủng nào!!!</small>
+                <small style={{ fontSize: ".65rem" }}>Săn ưu đãi khủng nào!!!</small>
               </div>
             )}
             {/* Password small text */}
@@ -240,7 +250,7 @@ export default function LoginModal() {
         {resetPasswordPage && (
           <DialogTitle id="form-dialog-title">
             <div style={styleFlex}>
-              <span>
+              <span onClick={handleBackFromResetPasswordToPassword}>
                 <img
                   src="/img/left-arrow.svg"
                   style={{
@@ -273,7 +283,7 @@ export default function LoginModal() {
         {OTPPage && (
           <DialogTitle id="form-dialog-title">
             <div style={styleFlex}>
-              <span>
+              <span onClick={handleBackFromOTPToResetPassword}>
                 <img
                   src="/img/left-arrow.svg"
                   style={{
@@ -306,7 +316,7 @@ export default function LoginModal() {
         {signupPage && (
           <DialogTitle id="form-dialog-title">
             <div style={styleFlex}>
-              <span>
+              <span onClick={handleBackFromSignupToLogin}>
                 <img
                   src="/img/left-arrow.svg"
                   style={{
