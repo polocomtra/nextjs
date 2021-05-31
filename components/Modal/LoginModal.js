@@ -28,6 +28,8 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
   const [phone, setPhone] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [loginPage, setLoginPage] = useState(true);
+  const [checkPhoneValid,setCheckPhoneValid]=useState(false);
+  const [phoneValidMessage,setPhoneValidMessage]=useState('');
 
   //Password Page
   const [passwordPage, setPasswordPage] = useState(false);
@@ -65,8 +67,12 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
   };
   const handleChange = (e) => {
     let { value } = e.target;
+    setCheckPhoneValid(true)
+    setPhoneValidMessage('SĐT không hợp lệ')
     if (value.length === 10) {
       setShowButton(false);
+      setCheckPhoneValid(false);
+      setPhoneValidMessage('')
     } else {
       setShowButton(true);
     }
@@ -163,6 +169,8 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
       email
     ) {
       setOpen(false);
+    }else{
+      alert('All fields must be fill')
     }
   };
 
@@ -349,7 +357,9 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
           <DialogContentText></DialogContentText>
           {/* Login field */}
           {loginPage && (
-            <TextField
+            <div>
+              { checkPhoneValid && <small style={{fontSize:'.5rem',color:'red'}}>{phoneValidMessage}</small>}
+              <TextField
               autoFocus
               margin="dense"
               id="phone"
@@ -358,6 +368,8 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
               fullWidth
               onChange={handleChange}
             />
+            </div>
+            
           )}
           {/* Password field */}
           {passwordPage && (
