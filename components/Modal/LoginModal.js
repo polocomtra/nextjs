@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -17,19 +17,17 @@ import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import { phoneData } from "../../data";
 import { passwordData } from "../../data";
 import { OTPkey } from "../../data";
-import {useStyles} from './style'
-import {styleFlex} from './style'
+import { useStyles } from "./style";
+import { styleFlex } from "./style";
 
-
-
-export default function LoginModal({showModal,handleSuccessLogin}) {
+export default function LoginModal({ showModal, handleSuccessLogin }) {
   const [open, setOpen] = useState(true);
   // Login Page
   const [phone, setPhone] = useState("");
   const [showButton, setShowButton] = useState(true);
   const [loginPage, setLoginPage] = useState(true);
-  const [checkPhoneValid,setCheckPhoneValid]=useState(false);
-  const [phoneValidMessage,setPhoneValidMessage]=useState('');
+  const [checkPhoneValid, setCheckPhoneValid] = useState(false);
+  const [phoneValidMessage, setPhoneValidMessage] = useState("");
 
   //Password Page
   const [passwordPage, setPasswordPage] = useState(false);
@@ -42,7 +40,7 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
   const [showResetPasswordButton, setShowResetPasswordButton] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [reEnterNewPassword, setReEnterNewPassword] = useState("");
-  const [updatePassword,setUpdatePassword]=useState('');
+  const [updatePassword, setUpdatePassword] = useState("");
 
   //OTP Page
   const [OTPPage, setOTPPage] = useState(false);
@@ -59,20 +57,33 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
     rePassword: "",
     email: "",
   });
+  const [error, setError] = useState({
+    preName: "",
+    preNameError: false,
+    name: "",
+    nameError: false,
+    password: "",
+    passwordError: false,
+    rePassword: "",
+    rePasswordError: false,
+    email: "",
+    emailError: false,
+  });
 
-  const classes=useStyles()
+  const classes = useStyles();
 
   const handlePhoneCorrect = (phoneValue) => {
     return phoneValue === phoneData;
   };
   const handleChange = (e) => {
     let { value } = e.target;
-    setCheckPhoneValid(true)
-    setPhoneValidMessage('SĐT không hợp lệ')
+    setPhone(value);
+    setCheckPhoneValid(true);
+    setPhoneValidMessage("SĐT không hợp lệ");
     if (value.length === 10) {
       setShowButton(false);
       setCheckPhoneValid(false);
-      setPhoneValidMessage('')
+      setPhoneValidMessage("");
     } else {
       setShowButton(true);
     }
@@ -112,23 +123,24 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
 
   const handleClose = () => {
     setOpen(false);
-    showModal(false)
+    showModal(false);
   };
 
   const handleLoginButton = () => {
-    const passwordValue = document.getElementById(
-      "standard-adornment-password"
-    ).value;
+    let passwordValue = password;
     setPassword(passwordValue);
-    if (handleCorrectPassword(passwordValue) || passwordValue===updatePassword) {
+    if (
+      handleCorrectPassword(passwordValue) ||
+      passwordValue === updatePassword
+    ) {
       setOpen(false);
-      handleSuccessLogin('Nguyễn Tiến Tài')
+      handleSuccessLogin("Nguyễn Tiến Tài");
     }
   };
 
   const handleContinueButton = () => {
-    const phoneValue = document.getElementById("phone").value;
-    setPhone(phoneValue);
+    console.log(phone);
+    let phoneValue = phone;
     if (handlePhoneCorrect(phoneValue)) {
       setLoginPage(false);
       setPasswordPage(true);
@@ -145,7 +157,7 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
       setOTPPage(true);
     } else {
       alert("Password not match");
-      setReEnterNewPassword('')
+      setReEnterNewPassword("");
     }
   };
 
@@ -155,7 +167,7 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
       setPasswordPage(true);
     } else {
       alert("OTP not match");
-      setOTP('')
+      setOTP("");
     }
   };
 
@@ -169,13 +181,73 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
       email
     ) {
       setOpen(false);
-    }else{
-      alert('All fields must be fill')
+    } else {
+      alert("All fields must be fill");
     }
   };
 
-  const handleChangeSignup = (prop) => (event) => {
-    setValues({ ...values, [prop]: event.target.value });
+  const handleErrorPreName = (e) => {
+    const { value } = e.target;
+    setValues({ ...values, preName: value });
+    if (!value) {
+      setError({
+        ...error,
+        preName: "Tên đệm không được trống",
+        preNameError: true,
+      });
+    } else {
+      setError({ ...error, preName: "", preNameError: false });
+    }
+  };
+  const handleErrorName = (e) => {
+    const { value } = e.target;
+    setValues({ ...values, name: value });
+    if (!value) {
+      setError({ ...error, name: "Tên không được trống", nameError: true });
+    } else {
+      setError({ ...error, name: "", nameError: false });
+    }
+  };
+  const handlePasswordError = (e) => {
+    const { value } = e.target;
+    setValues({ ...values, password: value });
+    if (!value) {
+      setError({
+        ...error,
+        password: "Mật khẩu không được trống",
+        passwordError: true,
+      });
+    } else {
+      setError({ ...error, password: "", passwordError: false });
+    }
+  };
+  const handleRePasswordError = (e) => {
+    const { value } = e.target;
+    setValues({ ...values, rePassword: value });
+    if (!value) {
+      setError({
+        ...error,
+        rePassword: "Mật khẩu không được trống",
+        rePasswordError: true,
+      });
+    } else {
+      setError({ ...error, rePassword: "", rePasswordError: false });
+    }
+  };
+  const handleEmailError = (e) => {
+    const { value } = e.target;
+    setValues({ ...values, email: value });
+    const re =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!re.test(value.toLowerCase()) || !value) {
+      setError({
+        ...error,
+        email: "Email không được trống và phải đúng định dạng",
+        emailError: true,
+      });
+    } else {
+      setError({ ...error, email: "", emailError: false });
+    }
   };
 
   const handleForgetPasswordButton = () => {
@@ -183,25 +255,25 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
     setResetPasswordPage(true);
   };
 
-  const handleBackFromPasswordToLogin=()=>{
+  const handleBackFromPasswordToLogin = () => {
     setPasswordPage(false);
-    setLoginPage(true)
-  }
+    setLoginPage(true);
+  };
 
-  const handleBackFromResetPasswordToPassword=()=>{
+  const handleBackFromResetPasswordToPassword = () => {
     setResetPasswordPage(false);
-    setPasswordPage(true)
-  }
+    setPasswordPage(true);
+  };
 
-  const handleBackFromOTPToResetPassword=()=>{
+  const handleBackFromOTPToResetPassword = () => {
     setOTPPage(false);
-    setResetPasswordPage(true)
-  }
+    setResetPasswordPage(true);
+  };
 
-  const handleBackFromSignupToLogin=()=>{
+  const handleBackFromSignupToLogin = () => {
     setSignupPage(false);
-    setLoginPage(true)
-  }
+    setLoginPage(true);
+  };
 
   //Render Component
   return (
@@ -215,18 +287,18 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
         {(loginPage || passwordPage) && (
           <DialogTitle id="form-dialog-title">
             <div style={styleFlex}>
-              {
-                passwordPage && (<span onClick={handleBackFromPasswordToLogin}>
-                <img
-                  src="/img/left-arrow.svg"
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    paddingRight: "10px",
-                  }}
-                ></img>
-              </span>)
-              }
+              {passwordPage && (
+                <span onClick={handleBackFromPasswordToLogin}>
+                  <img
+                    src="/img/left-arrow.svg"
+                    style={{
+                      width: "24px",
+                      height: "24px",
+                      paddingRight: "10px",
+                    }}
+                  ></img>
+                </span>
+              )}
               <h5 style={{ fontWeight: "bold" }}>
                 Chào mừng bạn đã trở lại với Meete
               </h5>
@@ -240,7 +312,9 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
             {/* Login small text */}
             {loginPage && (
               <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>Săn ưu đãi khủng nào!!!</small>
+                <small style={{ fontSize: ".65rem" }}>
+                  Săn ưu đãi khủng nào!!!
+                </small>
               </div>
             )}
             {/* Password small text */}
@@ -358,18 +432,21 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
           {/* Login field */}
           {loginPage && (
             <div>
-              { checkPhoneValid && <small style={{fontSize:'.5rem',color:'red'}}>{phoneValidMessage}</small>}
+              {checkPhoneValid && (
+                <small style={{ fontSize: ".5rem", color: "red" }}>
+                  {phoneValidMessage}
+                </small>
+              )}
               <TextField
-              autoFocus
-              margin="dense"
-              id="phone"
-              label="Nhập số điện thoại"
-              type="text"
-              fullWidth
-              onChange={handleChange}
-            />
+                autoFocus
+                margin="dense"
+                id="phone"
+                label="Nhập số điện thoại"
+                type="text"
+                fullWidth
+                onChange={handleChange}
+              />
             </div>
-            
           )}
           {/* Password field */}
           {passwordPage && (
@@ -476,9 +553,11 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
               <div>
                 <TextField
                   label="Họ và tên đệm"
+                  error={error.preNameError && true}
+                  helperText={error.preName}
                   id="standard-start-adortment-preName"
                   className={clsx(classes.margin, classes.textFieldSignup)}
-                  onChange={handleChangeSignup("preName")}
+                  onChange={handleErrorPreName}
                 />
                 <FormControl
                   className={clsx(classes.margin, classes.textFieldSignup)}
@@ -489,7 +568,8 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
                   <Input
                     id="standard-adornment-signup"
                     type={showPassword ? "text" : "password"}
-                    onChange={handleChangeSignup("password")}
+                    error={error.passwordError && true}
+                    onChange={handlePasswordError}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -508,7 +588,9 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
                 <TextField
                   label="Tên"
                   id="standard-start-adortment-name"
-                  onChange={handleChangeSignup("name")}
+                  error={error.nameError && true}
+                  helperText={error.name}
+                  onChange={handleErrorName}
                   className={clsx(classes.margin, classes.textFieldSignup)}
                 />
                 <FormControl
@@ -520,7 +602,8 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
                   <Input
                     id="standard-adornment-signup-reenter-password"
                     type={showPassword ? "text" : "password"}
-                    onChange={handleChangeSignup("rePassword")}
+                    error={error.rePasswordError && true}
+                    onChange={handleRePasswordError}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -539,7 +622,9 @@ export default function LoginModal({showModal,handleSuccessLogin}) {
                 <TextField
                   label="Email"
                   id="standard-start-adortment-email"
-                  onChange={handleChangeSignup("email")}
+                  error={error.emailError && true}
+                  helperText={error.email}
+                  onChange={handleEmailError}
                   className={clsx(classes.margin, classes.textFieldSignup)}
                 />
               </div>

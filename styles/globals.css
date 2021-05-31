@@ -28,8 +28,14 @@ body {
   background-color: #f4f6f9;
   width: 100%;
 }
-img {
+ img {
   max-width: 100%;
+}
+
+main {
+  background: #f4f6f9;
+  width: 100%;
+  height: 100%;
 }
 
 .header {
@@ -39,11 +45,7 @@ img {
   z-index: 16;
 }
 
-main {
-  background: #f4f6f9;
-  width: 100%;
-  height: 100%;
-}
+
 
 .main-content {
   padding-top: 89px;
@@ -51,7 +53,7 @@ main {
 }
 
 /* updates breadcrum */
-.typo-color-secondary {
+ .typo-color-secondary {
   color: rgba(0, 0, 0, 0.54);
 }
 .typo-body {
@@ -272,7 +274,6 @@ main {
   margin-left: 1rem;
 }
 
-/* updates */
 .main-header-1 {
   position: fixed;
   width: 100%;
@@ -535,4 +536,4 @@ main {
   .style-content {
     display: block;
   }
-}
+} 

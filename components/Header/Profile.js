@@ -3,18 +3,20 @@ import LoginModal from "../Modal/LoginModal";
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
-  const [user,setUser]=useState('Đăng nhập')
+  const [clicked, setClicked] = useState(true);
+  const [user, setUser] = useState("Đăng nhập");
   const handleClick = () => {
     setShowModal(!showModal);
   };
 
-  const handleCloseModal=(showModalFromProps)=>{
-    setShowModal(showModalFromProps)
-  }
+  const handleCloseModal = (showModalFromProps) => {
+    setShowModal(showModalFromProps);
+  };
 
-  const handleSuccessLogin=(userFromProps)=>{
-    setUser(userFromProps)
-  }
+  const handleSuccessLogin = (userFromProps) => {
+    setUser(userFromProps);
+    setClicked(false);
+  };
   return (
     <div className="col-12 col-sm-4 col-md-4 header-col-1">
       <ul
@@ -43,16 +45,22 @@ const Profile = () => {
             </a>
           </div>
         </li>
-        <li className="dropdown header-navItem-1 col-5" onClick={handleClick}>
+        <li
+          className="dropdown header-navItem-1 col-5"
+          onClick={clicked ? handleClick : null}
+        >
           <span className>
-            <span className="nav-link header-textWrap-1">
-              {user}
-            </span>
+            <span className="nav-link header-textWrap-1">{user}</span>
           </span>
         </li>
         <li className="col-1" />
       </ul>
-      {showModal && <LoginModal showModal={handleCloseModal} handleSuccessLogin={handleSuccessLogin} />}
+      {showModal && (
+        <LoginModal
+          showModal={handleCloseModal}
+          handleSuccessLogin={handleSuccessLogin}
+        />
+      )}
     </div>
   );
 };
