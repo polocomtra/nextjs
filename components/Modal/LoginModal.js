@@ -1,24 +1,25 @@
 import { useState } from "react";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import clsx from "clsx";
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormControl from "@material-ui/core/FormControl";
-import Visibility from "@material-ui/icons/Visibility";
-import VisibilityOff from "@material-ui/icons/VisibilityOff";
-import { phoneData } from "../../data";
-import { passwordData } from "../../data";
+import { passwordData, phoneData } from "../../data";
 import { OTPkey } from "../../data";
 import { useStyles } from "./style";
-import { styleFlex } from "./style";
+import Header from "./Login/HeaderLogin";
+import HeaderResetPassword from "./ResetPassword/HeaderResetPassword";
+import HeaderOTP from "./OTP/HeaderOTP";
+import HeaderSignup from "./Signup/HeaderSignup";
+import BodyLogin from "./Login/BodyLogin";
+import BodyPassword from "./Password/BodyPassword";
+import BodyResetPassword from "./ResetPassword/BodyResetPassword";
+import BodyOTP from "./OTP/BodyOTP";
+import FooterLogin from "./Login/FooterLogin";
+import FooterPassword from "./Password/FooterPassword";
+import FooterOTP from "./OTP/FooterOTP";
+import FooterSignup from "./Signup/FooterSignup";
+import FooterResetPassword from "./ResetPassword/FooterResetPassword";
+import BodySignup from "./Signup/BodySignup";
 
 export default function LoginModal({ showModal, handleSuccessLogin }) {
   const [open, setOpen] = useState(true);
@@ -70,8 +71,6 @@ export default function LoginModal({ showModal, handleSuccessLogin }) {
     emailError: false,
   });
 
-  const classes = useStyles();
-
   const handlePhoneCorrect = (phoneValue) => {
     return phoneValue === phoneData;
   };
@@ -88,8 +87,6 @@ export default function LoginModal({ showModal, handleSuccessLogin }) {
       setShowButton(true);
     }
   };
-
-  //handle Business Logic
 
   const handleCorrectPassword = (passwordValue) => {
     return passwordValue === passwordData;
@@ -186,67 +183,67 @@ export default function LoginModal({ showModal, handleSuccessLogin }) {
     }
   };
 
-  const handleErrorPreName = (e) => {
-    const { value } = e.target;
-    setValues({ ...values, preName: value });
-    if (!value) {
-      setError({
-        ...error,
-        preName: "Tên đệm không được trống",
-        preNameError: true,
-      });
-    } else {
-      setError({ ...error, preName: "", preNameError: false });
-    }
-  };
-  const handleErrorName = (e) => {
-    const { value } = e.target;
-    setValues({ ...values, name: value });
-    if (!value) {
-      setError({ ...error, name: "Tên không được trống", nameError: true });
-    } else {
-      setError({ ...error, name: "", nameError: false });
-    }
-  };
-  const handlePasswordError = (e) => {
-    const { value } = e.target;
-    setValues({ ...values, password: value });
-    if (!value) {
-      setError({
-        ...error,
-        password: "Mật khẩu không được trống",
-        passwordError: true,
-      });
-    } else {
-      setError({ ...error, password: "", passwordError: false });
-    }
-  };
-  const handleRePasswordError = (e) => {
-    const { value } = e.target;
-    setValues({ ...values, rePassword: value });
-    if (!value) {
-      setError({
-        ...error,
-        rePassword: "Mật khẩu không được trống",
-        rePasswordError: true,
-      });
-    } else {
-      setError({ ...error, rePassword: "", rePasswordError: false });
-    }
-  };
-  const handleEmailError = (e) => {
-    const { value } = e.target;
-    setValues({ ...values, email: value });
+  const validateEmail = (value) => {
     const re =
       /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(value.toLowerCase()) || !value) {
-      setError({
-        ...error,
-        email: "Email không được trống và phải đúng định dạng",
-        emailError: true,
-      });
-    } else {
-      setError({ ...error, email: "", emailError: false });
+    return re.test(value.toLowerCase());
+  };
+
+  const handleInput = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+    switch (name) {
+      case "preName":
+        if (!value) {
+          setError({
+            ...error,
+            preName: "Tên đệm không được trống",
+            preNameError: true,
+          });
+        } else {
+          setError({ ...error, preName: "", preNameError: false });
+        }
+        break;
+      case "name":
+        if (!value) {
+          setError({ ...error, name: "Tên không được trống", nameError: true });
+        } else {
+          setError({ ...error, name: "", nameError: false });
+        }
+        break;
+      case "password":
+        if (!value) {
+          setError({
+            ...error,
+            password: "Mật khẩu không được trống",
+            passwordError: true,
+          });
+        } else {
+          setError({ ...error, password: "", passwordError: false });
+        }
+        break;
+      case "rePassword":
+        if (!value) {
+          setError({
+            ...error,
+            rePassword: "Mật khẩu không được trống",
+            rePasswordError: true,
+          });
+        } else {
+          setError({ ...error, rePassword: "", rePasswordError: false });
+        }
+        break;
+      case "email":
+        if (!validateEmail(value) || !value) {
+          setError({
+            ...error,
+            email: "Email không được trống và phải đúng định dạng",
+            emailError: true,
+          });
+        } else {
+          setError({ ...error, email: "", emailError: false });
+        }
+        break;
     }
   };
 
@@ -285,418 +282,137 @@ export default function LoginModal({ showModal, handleSuccessLogin }) {
       >
         {/* Title - always open */}
         {(loginPage || passwordPage) && (
-          <DialogTitle id="form-dialog-title">
-            <div style={styleFlex}>
-              {passwordPage && (
-                <span onClick={handleBackFromPasswordToLogin}>
-                  <img
-                    src="/img/left-arrow.svg"
-                    style={{
-                      width: "24px",
-                      height: "24px",
-                      paddingRight: "10px",
-                    }}
-                  ></img>
-                </span>
-              )}
-              <h5 style={{ fontWeight: "bold" }}>
-                Chào mừng bạn đã trở lại với Meete
-              </h5>
-              <span onClick={handleClose}>
-                <img
-                  src="/img/cancel.svg"
-                  style={{ width: "24px", height: "24px", paddingLeft: "10px" }}
-                ></img>
-              </span>
-            </div>
-            {/* Login small text */}
-            {loginPage && (
-              <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>
-                  Săn ưu đãi khủng nào!!!
-                </small>
-              </div>
-            )}
-            {/* Password small text */}
-            {passwordPage && (
-              <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>
-                  Đăng nhập với số điện thoại {phoneData}
-                </small>
-              </div>
-            )}
-          </DialogTitle>
+          <Header
+            passwordPage={passwordPage}
+            handleBackFromPasswordToLogin={handleBackFromPasswordToLogin}
+            handleClose={handleClose}
+            loginPage={loginPage}
+            phoneData={phoneData}
+          />
         )}
 
         {/* Reset password */}
         {resetPasswordPage && (
-          <DialogTitle id="form-dialog-title">
-            <div style={styleFlex}>
-              <span onClick={handleBackFromResetPasswordToPassword}>
-                <img
-                  src="/img/left-arrow.svg"
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    paddingRight: "10px",
-                  }}
-                ></img>
-              </span>
-              <h5 style={{ fontWeight: "bold" }}>Khôi phục mật khẩu</h5>
-              <span onClick={handleClose}>
-                <img
-                  src="/img/cancel.svg"
-                  style={{ width: "24px", height: "24px", paddingLeft: "10px" }}
-                ></img>
-              </span>
-            </div>
-            {/* Resetpassword small text */}
-            {resetPasswordPage && (
-              <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>
-                  Tạo mật khẩu mới cho tài khoản {phoneData}
-                </small>
-              </div>
-            )}
-          </DialogTitle>
+          <HeaderResetPassword
+            handleBackFromResetPasswordToPassword={
+              handleBackFromResetPasswordToPassword
+            }
+            handleClose={handleClose}
+            resetPasswordPage={resetPasswordPage}
+            phoneData={phoneData}
+          />
         )}
 
         {/* OTP */}
         {OTPPage && (
-          <DialogTitle id="form-dialog-title">
-            <div style={styleFlex}>
-              <span onClick={handleBackFromOTPToResetPassword}>
-                <img
-                  src="/img/left-arrow.svg"
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    paddingRight: "10px",
-                  }}
-                ></img>
-              </span>
-              <h5 style={{ fontWeight: "bold" }}>Nhập mã xác thực</h5>
-              <span onClick={handleClose}>
-                <img
-                  src="/img/cancel.svg"
-                  style={{ width: "24px", height: "24px", paddingLeft: "10px" }}
-                ></img>
-              </span>
-            </div>
-            {/* OTP small text */}
-            {OTPPage && (
-              <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>
-                  Kiểm tra mã OTP đã gửi về email nguyentientai.3326@gmail.com
-                </small>
-              </div>
-            )}
-          </DialogTitle>
+          <HeaderOTP
+            handleBackFromOTPToResetPassword={handleBackFromOTPToResetPassword}
+            handleClose={handleClose}
+            OTPPage={OTPPage}
+          />
         )}
 
         {/* Signup page */}
         {signupPage && (
-          <DialogTitle id="form-dialog-title">
-            <div style={styleFlex}>
-              <span onClick={handleBackFromSignupToLogin}>
-                <img
-                  src="/img/left-arrow.svg"
-                  style={{
-                    width: "24px",
-                    height: "24px",
-                    paddingRight: "10px",
-                  }}
-                ></img>
-              </span>
-              <h5 style={{ fontWeight: "bold" }}>Tạo tài khoản mới</h5>
-              <span onClick={handleClose}>
-                <img
-                  src="/img/cancel.svg"
-                  style={{ width: "24px", height: "24px", paddingLeft: "10px" }}
-                ></img>
-              </span>
-            </div>
-            {/* Signup small text */}
-            {signupPage && (
-              <div style={styleFlex}>
-                <small style={{ fontSize: ".65rem" }}>
-                  Số điện thoại {phone} chưa có tài khoản MEETE, tạo ngay nào
-                </small>
-              </div>
-            )}
-          </DialogTitle>
+          <HeaderSignup
+            handleBackFromSignupToLogin={handleBackFromSignupToLogin}
+            handleClose={handleClose}
+            signupPage={signupPage}
+            phone={phone}
+          />
         )}
 
         <DialogContent>
           <DialogContentText></DialogContentText>
           {/* Login field */}
           {loginPage && (
-            <div>
-              {checkPhoneValid && (
-                <small style={{ fontSize: ".5rem", color: "red" }}>
-                  {phoneValidMessage}
-                </small>
-              )}
-              <TextField
-                autoFocus
-                margin="dense"
-                id="phone"
-                label="Nhập số điện thoại"
-                type="text"
-                fullWidth
-                onChange={handleChange}
-              />
-            </div>
+            <BodyLogin
+              checkPhoneValid={checkPhoneValid}
+              phoneValidMessage={phoneValidMessage}
+              handleChange={handleChange}
+            />
           )}
           {/* Password field */}
           {passwordPage && (
-            <div className={classes.root}>
-              <FormControl className={clsx(classes.margin, classes.textField)}>
-                <InputLabel htmlFor="standard-adornment-password">
-                  Password
-                </InputLabel>
-                <Input
-                  id="standard-adornment-password"
-                  type={showPassword ? "text" : "password"}
-                  onChange={handleChangePassword}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-                <small onClick={handleForgetPasswordButton}>
-                  <a style={{ float: "right", textDecoration: "underline" }}>
-                    Quên mật khẩu?
-                  </a>
-                </small>
-              </FormControl>
-            </div>
+            <BodyPassword
+              showPassword={showPassword}
+              handleChangePassword={handleChangePassword}
+              handleClickShowPassword={handleClickShowPassword}
+              handleMouseDownPassword={handleMouseDownPassword}
+              handleForgetPasswordButton={handleForgetPasswordButton}
+            />
           )}
 
           {/* ResetPassword */}
 
           {/* NewPassword field */}
           {resetPasswordPage && (
-            <div className={classes.root}>
-              <FormControl className={clsx(classes.margin, classes.textField)}>
-                <InputLabel htmlFor="standard-adornment-newpassword">
-                  Mật khẩu mới
-                </InputLabel>
-                <Input
-                  id="standard-adornment-newpassword"
-                  type={showPassword ? "text" : "password"}
-                  value={newPassword}
-                  onChange={handleChangeNewPassword}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-              {/* Re-enter new password */}
-              <FormControl className={clsx(classes.margin, classes.textField)}>
-                <InputLabel htmlFor="standard-adornment-resetpassword">
-                  Xác nhận mật khẩu
-                </InputLabel>
-                <Input
-                  id="standard-adornment-resetpassword"
-                  type={showPassword ? "text" : "password"}
-                  value={reEnterNewPassword}
-                  onChange={handleChangeReEnterNewPassword}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
-                      >
-                        {showPassword ? <Visibility /> : <VisibilityOff />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
-                />
-              </FormControl>
-            </div>
-          )}
-
-          {/* OTP field */}
-          {OTPPage && (
-            <TextField
-              autoFocus
-              margin="dense"
-              id="OTP"
-              label="Nhập mã OTP"
-              type="text"
-              value={OTP}
-              fullWidth
-              onChange={(e) => setOTP(e.target.value)}
+            <BodyResetPassword
+              showPassword={showPassword}
+              newPassword={newPassword}
+              handleChangeNewPassword={handleChangeNewPassword}
+              handleClickShowPassword={handleClickShowPassword}
+              handleMouseDownPassword={handleMouseDownPassword}
+              reEnterNewPassword={reEnterNewPassword}
+              handleChangeReEnterNewPassword={handleChangeReEnterNewPassword}
             />
           )}
 
+          {/* OTP field */}
+          {OTPPage && <BodyOTP OTP={OTP} setOTP={setOTP} />}
+
           {/* Signup  form */}
           {signupPage && (
-            <div className={classes.root}>
-              <div>
-                <TextField
-                  label="Họ và tên đệm"
-                  error={error.preNameError && true}
-                  helperText={error.preName}
-                  id="standard-start-adortment-preName"
-                  className={clsx(classes.margin, classes.textFieldSignup)}
-                  onChange={handleErrorPreName}
-                />
-                <FormControl
-                  className={clsx(classes.margin, classes.textFieldSignup)}
-                >
-                  <InputLabel htmlFor="standard-adornment-signup">
-                    Mật khẩu
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-signup"
-                    type={showPassword ? "text" : "password"}
-                    error={error.passwordError && true}
-                    onChange={handlePasswordError}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div>
-                <TextField
-                  label="Tên"
-                  id="standard-start-adortment-name"
-                  error={error.nameError && true}
-                  helperText={error.name}
-                  onChange={handleErrorName}
-                  className={clsx(classes.margin, classes.textFieldSignup)}
-                />
-                <FormControl
-                  className={clsx(classes.margin, classes.textFieldSignup)}
-                >
-                  <InputLabel htmlFor="standard-adornment-signup-reenter-password">
-                    Xác nhận mật khẩu
-                  </InputLabel>
-                  <Input
-                    id="standard-adornment-signup-reenter-password"
-                    type={showPassword ? "text" : "password"}
-                    error={error.rePasswordError && true}
-                    onChange={handleRePasswordError}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <Visibility /> : <VisibilityOff />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-              </div>
-              <div>
-                <TextField
-                  label="Email"
-                  id="standard-start-adortment-email"
-                  error={error.emailError && true}
-                  helperText={error.email}
-                  onChange={handleEmailError}
-                  className={clsx(classes.margin, classes.textFieldSignup)}
-                />
-              </div>
-            </div>
+            <BodySignup
+              error={error}
+              handleInput={handleInput}
+              showPassword={showPassword}
+              handleClickShowPassword={handleClickShowPassword}
+              handleMouseDownPassword={handleMouseDownPassword}
+            />
           )}
         </DialogContent>
         <DialogActions>
           {/* Continue button */}
           {loginPage && (
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              disabled={showButton}
-              onClick={handleContinueButton}
-            >
-              Tiếp tục
-            </Button>
+            <FooterLogin
+              showButton={showButton}
+              handleContinueButton={handleContinueButton}
+            />
           )}
           {/* Login button */}
           {passwordPage && (
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              disabled={showLoginButton}
-              onClick={handleLoginButton}
-            >
-              Đăng nhập
-            </Button>
+            <FooterPassword
+              showLoginButton={showLoginButton}
+              handleLoginButton={handleLoginButton}
+            />
           )}
 
           {/* Reset password button */}
 
           {resetPasswordPage && (
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              disabled={showResetPasswordButton}
-              onClick={handleResetPasswordButton}
-            >
-              Đổi mật khẩu
-            </Button>
+            <FooterResetPassword
+              showResetPasswordButton={showResetPasswordButton}
+              handleResetPasswordButton={handleResetPasswordButton}
+            />
           )}
 
           {/* OTP Auth button */}
 
           {OTPPage && (
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              disabled={showAuthButton}
-              onClick={handleClickAuthButton}
-            >
-              Xác thực
-            </Button>
+            <FooterOTP
+              showAuthButton={showAuthButton}
+              handleClickAuthButton={handleClickAuthButton}
+            />
           )}
 
           {/* Signup button */}
 
           {signupPage && (
-            <Button
-              variant="contained"
-              color="secondary"
-              fullWidth
-              disabled={showSignupButton}
-              onClick={handleClickSignupButton}
-            >
-              Đăng kí
-            </Button>
+            <FooterSignup
+              showSignupButton={showSignupButton}
+              handleClickSignupButton={handleClickSignupButton}
+            />
           )}
         </DialogActions>
       </Dialog>
